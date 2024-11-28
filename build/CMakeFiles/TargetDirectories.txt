@@ -1,0 +1,6 @@
+C:/Users/Bradley/Desktop/projects/C projects/rope/build/CMakeFiles/test_allocate_leaf.dir
+C:/Users/Bradley/Desktop/projects/C projects/rope/build/CMakeFiles/run_drmemory_test_allocate_leaf.dir
+C:/Users/Bradley/Desktop/projects/C projects/rope/build/CMakeFiles/run_drmemory.dir
+C:/Users/Bradley/Desktop/projects/C projects/rope/build/CMakeFiles/test.dir
+C:/Users/Bradley/Desktop/projects/C projects/rope/build/CMakeFiles/edit_cache.dir
+C:/Users/Bradley/Desktop/projects/C projects/rope/build/CMakeFiles/rebuild_cache.dir
