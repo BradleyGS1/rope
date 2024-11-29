@@ -1,5 +1,5 @@
 
-cmake_minimum_required(VERSION 3.29.2)
+cmake_minimum_required(VERSION 3.28.3)
 project(Rope)
 
 # Set the build type and runtime output directory
@@ -9,7 +9,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 # Set sources
 set(SOURCES ${CMAKE_SOURCE_DIR}/src/rope.c)
 
-# Include directory for headers (if needed)
+# Include directory for headers
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
 # Enable testing with CTest
@@ -30,7 +30,7 @@ foreach(TEST_FILE ${TEST_FILES})
     add_executable(${TEST_NAME} ${SOURCES} ${TEST_FILE})
 
     # Add the test to CTest
-    add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
+    add_test(NAME ${TEST_NAME} COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_NAME}.bin)
 
     # Conditionally add memory testing based on platform
     if(UNIX AND NOT APPLE) # Linux-specific setup
@@ -40,7 +40,7 @@ foreach(TEST_FILE ${TEST_FILES})
             OUTPUT valgrind_report_${TEST_NAME}.txt
             COMMAND valgrind --leak-check=full --error-exitcode=1 
                     --log-file=valgrind_report_${TEST_NAME}.txt 
-                    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_NAME}
+                    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_NAME}.bin
             WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
             COMMENT "Running Valgrind on ${TEST_NAME}..."
         )

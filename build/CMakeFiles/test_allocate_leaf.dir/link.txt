@@ -1,0 +1,1 @@
+/usr/bin/cc -O2 -g -DNDEBUG CMakeFiles/test_allocate_leaf.dir/src/rope.c.o CMakeFiles/test_allocate_leaf.dir/tests/test_allocate_leaf.c.o -o bin/test_allocate_leaf.bin 

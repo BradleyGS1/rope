@@ -1,18 +1,18 @@
-Start testing: Nov 28 01:09 GMT Standard Time
+Start testing: Nov 28 23:04 GMT
 ----------------------------------------------------------
 1/1 Testing: test_allocate_leaf
 1/1 Test: test_allocate_leaf
-Command: "C:/Users/Bradley/Desktop/projects/C projects/rope/build/bin/test_allocate_leaf.exe"
-Directory: C:/Users/Bradley/Desktop/projects/C projects/rope/build
-"test_allocate_leaf" start time: Nov 28 01:09 GMT Standard Time
+Command: "/home/bradlinux/Projects/rope/build/bin/test_allocate_leaf.bin"
+Directory: /home/bradlinux/Projects/rope/build
+"test_allocate_leaf" start time: Nov 28 23:04 GMT
 Output:
 ----------------------------------------------------------
 <end of output>
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"test_allocate_leaf" end time: Nov 28 01:09 GMT Standard Time
+"test_allocate_leaf" end time: Nov 28 23:04 GMT
 "test_allocate_leaf" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Nov 28 01:09 GMT Standard Time
+End testing: Nov 28 23:04 GMT

@@ -28,9 +28,10 @@ RopeNode *allocate_leaf(char *str) {
         printf("Error - Failed to allocate memory for allocate_leaf.\n");
         return NULL;
     }
-    leaf->str = _strdup(str);
+    leaf->str = strdup(str);
     leaf->left = NULL;
     leaf->right = NULL;
+    leaf->parent = NULL;
     leaf->length = strlen(str);
     leaf->height = 1;
     leaf->weight = strlen(str);
