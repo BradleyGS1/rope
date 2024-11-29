@@ -51,8 +51,6 @@ void free_leaf(RopeNode *leaf) {
             leaf->parent->right = NULL;
         }
     }
-    if (leaf->left) leaf->left->parent = NULL;
-    if (leaf->right) leaf->right->parent = NULL;
     if (leaf->str) free(leaf->str);
     leaf->str = NULL;
     free(leaf);
