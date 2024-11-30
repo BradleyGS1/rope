@@ -183,4 +183,38 @@ RopeNode *concat_no_rebalance(RopeNode *left, RopeNode *right) {
     return parent;
 }
 
+/*
+ * TESTING ONLY
+ * Creates a tree by performing:
+ *  RopeNode *node_1 = allocate_leaf("Hello_");
+ *  RopeNode *node_2 = allocate_leaf("my_");
+ *  RopeNode *node_3 = allocate_leaf("na");
+ *  RopeNode *node_4 = allocate_leaf("me_i");
+ *  RopeNode *node_5 = allocate_leaf("s");
+ *  RopeNode *node_6 = allocate_leaf("_Simon");
+ *  RopeNode *node_7 = concat_no_rebalance(node_3, node_4);
+ *  RopeNode *node_8 = concat_no_rebalance(node_5, node_6);
+ *  RopeNode *node_9 = concat_no_rebalance(node_1, node_2);
+ *  RopeNode *node_10 = concat_no_rebalance(node_7, node_8);
+ *  RopeNode *node_11 = concat_no_rebalance(node_9, node_10);
+ *  return node_11;
+ * Returning the pointer to the root node of the tree. The memory allocated should be
+ * freed by calling free_tree(node_11) once done.
+ * Returns:
+ * - RopeNode *. A pointer which points to the root node of the created tree.
+ */
+RopeNode *testing_create_tree_1() {
+    RopeNode *node_1 = allocate_leaf("Hello_");
+    RopeNode *node_2 = allocate_leaf("my_");
+    RopeNode *node_3 = allocate_leaf("na");
+    RopeNode *node_4 = allocate_leaf("me_i");
+    RopeNode *node_5 = allocate_leaf("s");
+    RopeNode *node_6 = allocate_leaf("_Simon");
+    RopeNode *node_7 = concat_no_rebalance(node_3, node_4);
+    RopeNode *node_8 = concat_no_rebalance(node_5, node_6);
+    RopeNode *node_9 = concat_no_rebalance(node_1, node_2);
+    RopeNode *node_10 = concat_no_rebalance(node_7, node_8);
+    RopeNode *node_11 = concat_no_rebalance(node_9, node_10);
+    return node_11;
+}
 

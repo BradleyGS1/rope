@@ -20,14 +20,20 @@ typedef struct RopeNode {
     struct RopeNode *parent;
 } RopeNode;
 
+// Basic functions
 RopeNode *allocate_leaf(char *str);
 void free_leaf(RopeNode *leaf);
 void free_tree(RopeNode *root);
 
+// Utility functions
 bool is_balanced(RopeNode *root);
 bool compare_nodes(RopeNode *root, int *lengths, int *heights, int *weights, int *index, int size);
 
+// Rope operations
 RopeNode *concat_no_rebalance(RopeNode *left, RopeNode *right);
+
+// Testing functions
+RopeNode *testing_create_tree_1();
 
 #endif
 
