@@ -199,7 +199,7 @@ RopeNode *concat_no_rebalance(RopeNode *left, RopeNode *right) {
  *  RopeNode *node_11 = concat_no_rebalance(node_9, node_10);
  *  return node_11;
  * Returning the pointer to the root node of the tree. The memory allocated should be
- * freed by calling free_tree(node_11) once done.
+ * freed by calling free_tree(node_11) once done. This tree is a balanced tree.
  * Returns:
  * - RopeNode *. A pointer which points to the root node of the created tree.
  */
@@ -216,5 +216,56 @@ RopeNode *testing_create_tree_1() {
     RopeNode *node_10 = concat_no_rebalance(node_7, node_8);
     RopeNode *node_11 = concat_no_rebalance(node_9, node_10);
     return node_11;
+}
+
+/*
+ * TESTING ONLY
+ * Creates a tree by performing:
+ *  RopeNode *node_1 = allocate_leaf("The_");
+ *  RopeNode *node_2 = allocate_leaf("qui");
+ *  RopeNode *node_3 = allocate_leaf("ck_bro");
+ *  RopeNode *node_4 = allocate_leaf("w");
+ *  RopeNode *node_5 = allocate_leaf("n_fo");
+ *  RopeNode *node_6 = allocate_leaf("x_ju");
+ *  RopeNode *node_7 = allocate_leaf("mps_o");
+ *  RopeNode *node_8 = allocate_leaf("ver");
+ *  RopeNode *node_9 = allocate_leaf("_the_la");
+ *  RopeNode *node_10 = allocate_leaf("zy_dog");
+ *  RopeNode *node_11 = concat_no_rebalance(node_1, node_2);
+ *  RopeNode *node_12 = concat_no_rebalance(node_3, node_4);
+ *  RopeNode *node_13 = concat_no_rebalance(node_5, node_6);
+ *  RopeNode *node_14 = concat_no_rebalance(node_7, node_8);
+ *  RopeNode *node_15 = concat_no_rebalance(node_9, node_10);
+ *  RopeNode *node_16 = concat_no_rebalance(node_11, node_12);
+ *  RopeNode *node_17 = concat_no_rebalance(node_13, node_14);
+ *  RopeNode *node_18 = concat_no_rebalance(node_16, node_17);
+ *  RopeNode *node_19 = concat_no_rebalance(node_15, node_18);
+ *  return node_19;
+ * Returning the pointer to the root node of the tree. The memory allocated should be
+ * freed by calling free_tree(node_19) once done. This tree is an unbalanced tree.
+ * Returns:
+ * - RopeNode *. A pointer which points to the root node of the created tree.
+ */
+RopeNode *testing_create_tree_2() {
+    RopeNode *node_1 = allocate_leaf("The_");
+    RopeNode *node_2 = allocate_leaf("qui");
+    RopeNode *node_3 = allocate_leaf("ck_bro");
+    RopeNode *node_4 = allocate_leaf("w");
+    RopeNode *node_5 = allocate_leaf("n_fo");
+    RopeNode *node_6 = allocate_leaf("x_ju");
+    RopeNode *node_7 = allocate_leaf("mps_o");
+    RopeNode *node_8 = allocate_leaf("ver");
+    RopeNode *node_9 = allocate_leaf("_the_la");
+    RopeNode *node_10 = allocate_leaf("zy_dog");
+    RopeNode *node_11 = concat_no_rebalance(node_1, node_2);
+    RopeNode *node_12 = concat_no_rebalance(node_3, node_4);
+    RopeNode *node_13 = concat_no_rebalance(node_5, node_6);
+    RopeNode *node_14 = concat_no_rebalance(node_7, node_8);
+    RopeNode *node_15 = concat_no_rebalance(node_9, node_10);
+    RopeNode *node_16 = concat_no_rebalance(node_11, node_12);
+    RopeNode *node_17 = concat_no_rebalance(node_13, node_14);
+    RopeNode *node_18 = concat_no_rebalance(node_16, node_17);
+    RopeNode *node_19 = concat_no_rebalance(node_15, node_18);
+    return node_19;
 }
 

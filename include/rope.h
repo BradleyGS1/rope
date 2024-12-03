@@ -34,6 +34,7 @@ RopeNode *concat_no_rebalance(RopeNode *left, RopeNode *right);
 
 // Testing functions
 RopeNode *testing_create_tree_1();
+RopeNode *testing_create_tree_2();
 
 #endif
 
