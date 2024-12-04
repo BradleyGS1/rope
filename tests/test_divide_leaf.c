@@ -5,7 +5,7 @@
 
 void test_divide_leaf_1() {
     RopeNode *leaf = allocate_leaf("Hello");
-    divide_node(leaf, 2);
+    divide_leaf(leaf, 2);
 
     RopeNode *left = leaf->left;
     RopeNode *right = leaf->right;
@@ -32,7 +32,7 @@ void test_divide_leaf_2() {
 
     int index = 14;
     RopeNode *leaf = fetch_leaf(root, &index);
-    divide_node(leaf, 3);
+    divide_leaf(leaf, 3);
     backprop_height(leaf);
 
     assert(str_is_equal(leaf->left->str, "me_"));
