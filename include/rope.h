@@ -20,17 +20,26 @@ typedef struct RopeNode {
     struct RopeNode *parent;
 } RopeNode;
 
+typedef struct SplitRopeNodes {
+    RopeNode *first;
+    RopeNode *second;
+} SplitRopeNodes;
+
 // Basic functions
 RopeNode *allocate_leaf(char *str);
 void free_leaf(RopeNode *leaf);
 void free_tree(RopeNode *root);
+void backprop_height(RopeNode *node);
 
 // Utility functions
+bool str_is_equal(char *str_1, char *str_2);
 bool is_balanced(RopeNode *root);
 bool compare_nodes(RopeNode *root, int *lengths, int *heights, int *weights, int *index, int size);
 
 // Rope operations
+RopeNode *fetch_leaf(RopeNode *root, int *index);
 RopeNode *concat_no_rebalance(RopeNode *left, RopeNode *right);
+void divide_node(RopeNode *node, int index);
 
 // Testing functions
 RopeNode *testing_create_tree_1();

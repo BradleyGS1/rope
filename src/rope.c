@@ -67,6 +67,40 @@ void free_tree(RopeNode *root) {
 }
 
 /*
+ * Goes up the tree backpropogating the height values from the current node all
+ * the way up to the root node. This is done by recursively calling this function
+ * on the parent node.
+ * Parameters:
+ * - RopeNode *node. The pointer to the node we want to being the height backprop
+ *   from. Usually started from a parent of a leaf.
+ */
+void backprop_height(RopeNode *node) {
+    if (!node) return;
+    int left_height = (node->left ? node->left->height : 0);
+    int right_height = (node->right ? node->right->height : 0);
+    node->height = (left_height > right_height ? left_height : right_height) + 1;
+    backprop_height(node->parent);
+}
+
+/*
+ * A simple boolean function that returns true if both strings are identical, else
+ * false.
+ * Parameters:
+ * - char *str_1.
+ * - char *str_2.
+ * Returns:
+ * - bool. Returns true if both strings are equal otherwise returns false.
+ */
+bool str_is_equal(char *str_1, char *str_2) {
+    if (!str_1 || !str_2) {
+        printf("Error - arguments char *str_1, char *str_2 cannot be NULL for str_is_equal.\n");
+        return false;
+    }
+    // strcmp returns 0 if they are identical
+    return (strcmp(str_1, str_2) == 0);
+}
+
+/*
  * A simple boolean function that returns true if the tree represented by the
  * given root node is balanced assuming that the left and right subtrees are
  * balanced.
@@ -123,6 +157,35 @@ bool compare_nodes(RopeNode *root, int *lengths, int *heights, int *weights, int
 }
 
 /*
+ * Fetches the leaf which contains the character at the provided index of the full
+ * string (represented by the concatenation of each leaf substring) and alters the
+ * value of index to equal the index of the character from a frame of reference of
+ * the fetched leaf node.
+ * Parameters:
+ * - RopeNode *root. A pointer to the root of the rope tree we want to search.
+ * - int *index. A pointer to an integer index representing the index of the
+ *   character we want the fetched node to contain. Is updated.
+ * Returns:
+ * - RopeNode *. A pointer to the node that contains the character at the index.
+ */
+RopeNode *fetch_leaf(RopeNode *root, int *index) {
+    if (!root) {
+        printf("Error - argument RopeNode *root, cannot be NULL.\n");
+        return NULL;
+    }
+    if (!root->left && !root->right) {
+        return root;
+    }
+    if (*index < root->weight) {
+        if (root->left) return fetch_leaf(root->left, index);
+    } else {
+        (*index) -= root->weight;
+        if (root->right) return fetch_leaf(root->right, index);
+    }
+    return NULL;
+}
+
+/*
  * Concatenates two nodes 'left' and 'right' allocating memory for a new parent
  * node 'parent' and setting the left child of 'parent' to be 'left' and the right
  * child of 'parent' to be 'right'. This function DOES NOT PERFORM REBALANCING and
@@ -153,10 +216,6 @@ RopeNode *concat_no_rebalance(RopeNode *left, RopeNode *right) {
         return NULL;
     }
 
-    parent->str = NULL;
-    parent->left = left;
-    parent->right = right;
-
     int left_length = 0, right_length = 0;
     int left_height = 0, right_height = 0;
     int left_weight = 0, right_weight = 0;
@@ -181,6 +240,65 @@ RopeNode *concat_no_rebalance(RopeNode *left, RopeNode *right) {
     parent->weight = left_length;
 
     return parent;
+}
+
+/*
+ * Divides a leaf into two leaves which branch from the original. The length of the string
+ * represented by the new left leaf is index and the remaining string goes to the right leaf.
+ * This is used in the split operation. DOES NOT AUTOMATICALLY BACKPROP HEIGHT VALUES.
+ * Parameters:
+ * - RopeNode *leaf. A pointer to the leaf node we want to divide into two new leaves.
+ * - int index. The length of the resulting string in the new left leaf.
+ */
+void divide_leaf(RopeNode *leaf, int index) {
+    if (!leaf) {
+        printf("Error - argument RopeNode *leaf, cannot be NULL.\n");
+        return;
+    }
+    if (index < 0) {
+        printf("Error - index %d is less than 0.\n", index);
+        return;
+    }
+    if (index >= leaf->length) {
+        printf("Error - index %d exceeds leaf length %d.\n", index, leaf->length);
+        return;
+    }
+
+    int right_str_len = leaf->length - index;
+    char *left_str = malloc((index + 1) * sizeof(char));
+    char *right_str = malloc((right_str_len + 1) * sizeof(char));
+    if (!left_str || !right_str) {
+        printf("Error - failed to allocate memory for divide_leaf.\n");
+        return;
+    }
+
+    for (int i = 0; i < index; i++) {
+        left_str[i] = leaf->str[i];
+    }
+    for (int j = 0; j < right_str_len; j++) {
+        right_str[j] = leaf->str[j + index];
+    }
+    left_str[index] = '\0';
+    right_str[right_str_len] = '\0';
+
+    RopeNode *left = allocate_leaf(left_str);
+    RopeNode *right = allocate_leaf(right_str);
+    if (!left || !right) {
+        printf("Error - failed to allocate memory for divide_leaf.\n");
+        return;
+    }
+
+    left->parent = leaf;
+    right->parent = leaf;
+
+    free(left_str);
+    free(right_str);
+    free(leaf->str);
+
+    leaf->str = NULL;
+    leaf->left = left;
+    leaf->right = right;
+    leaf->weight = index;
 }
 
 /*
