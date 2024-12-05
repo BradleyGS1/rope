@@ -30,6 +30,7 @@ RopeNode *allocate_leaf(char *str);
 void free_leaf(RopeNode *leaf);
 void free_tree(RopeNode *root);
 void backprop_height(RopeNode *node);
+void split_node(RopeNode *node, SplitRopeNodes *split_nodes);
 
 // Utility functions
 bool str_is_equal(char *str_1, char *str_2);
@@ -40,6 +41,7 @@ bool compare_nodes(RopeNode *root, int *lengths, int *heights, int *weights, int
 RopeNode *fetch_leaf(RopeNode *root, int *index);
 RopeNode *concat_no_rebalance(RopeNode *left, RopeNode *right);
 void divide_leaf(RopeNode *node, int index);
+SplitRopeNodes *split_no_rebalance(RopeNode *root, int index);
 
 // Testing functions
 RopeNode *testing_create_tree_1();

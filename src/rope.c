@@ -82,6 +82,23 @@ void backprop_height(RopeNode *node) {
     backprop_height(node->parent);
 }
 
+void split_node(RopeNode *node, SplitRopeNodes *split_nodes) {
+    if (!node || !split_nodes) {
+        printf("Error - arguments RopeNode *node and SplitRopeNodes *split_nodes cannot be NULL.\n");
+        return;
+    }
+    if (node->parent) {
+        if (node->parent->left == node) node->parent->left = NULL;
+        if (node->parent->right == node) node->parent->right = NULL;
+    }
+    if (split_nodes->second) {
+        split_nodes->second = concat_no_rebalance(split_nodes->second, node);
+    } else {
+        node->parent = NULL;
+        split_nodes->second = node;
+    }
+}
+
 /*
  * A simple boolean function that returns true if both strings are identical, else
  * false.
@@ -221,11 +238,13 @@ RopeNode *concat_no_rebalance(RopeNode *left, RopeNode *right) {
     int left_weight = 0, right_weight = 0;
 
     if (left) {
+        left->parent = parent;
         left_length = left->length;
         left_height = left->height;
         left_weight = left->weight;
     }
     if (right) {
+        right->parent = parent;
         right_length = right->length;
         right_height = right->height;
         right_weight = right->weight;
@@ -299,6 +318,79 @@ void divide_leaf(RopeNode *leaf, int index) {
     leaf->left = left;
     leaf->right = right;
     leaf->weight = index;
+}
+
+/*
+ * Performs the split operation on the rope at the provided index. Will split the full
+ * string represented by the rope into two new ropes. The left rope will represent
+ * the first index many characters and the remaining will be represented by the right rope.
+ * This function DOES NOT PERFORM REBALANCING and does not even check at any stage for
+ * the balanced condition. The memory allocated for the output struct must be freed by user.
+ * Parameters:
+ * - RopeNode *root. The pointer to the root node of the tree we want to split.
+ * - int index. The index where we want to perform the split.
+ * Returns:
+ * - SplitRopeNodes *. This struct contains the pointer to the left rope as member .first 
+ *   and the right rope as member .second.
+ */
+SplitRopeNodes *split_no_rebalance(RopeNode *root, int index) {
+    if (!root) {
+        printf("Error - argument RopeNode *root cannot be NULL.\n");
+        return NULL;
+    }
+
+    SplitRopeNodes *split_nodes = malloc(sizeof(SplitRopeNodes));
+    if (!split_nodes) {
+        printf("Error - failed to allocate memory for split_no_rebalance.\n");
+     return NULL;
+    }
+
+    RopeNode *leaf = fetch_leaf(root, &index);
+    if (index > 0) {
+        divide_leaf(leaf, index);
+        leaf = leaf->right;
+    }
+
+    // We first ascend the tree and split off the node that is the first occuring right child.
+    RopeNode *node = leaf;
+    RopeNode *parent = node->parent;
+    while (parent) {
+        if (parent->right == node) {
+            split_node(node, split_nodes);
+            node = parent;
+            parent = node->parent;
+            break;
+        }
+        node = parent;
+        parent = node->parent;
+    }
+
+    // Then we ascend the tree and split off the right sibling if the current node is a
+    // left sibling.
+    while (node) {
+        int left_length = 0, right_length = 0;
+        int left_height = 0, right_height = 0;
+
+        if (node->left) {
+            left_length = node->left->length;
+            left_height = node->left->height;
+        }
+        if (node->right) {
+            right_length = node->right->length;
+            right_height = node->right->height;
+        }
+        node->weight = left_length;
+        node->length = left_length + right_length;
+        node->height = (left_height > right_height ? left_height : right_height) + 1;
+
+        if (parent && parent->right && parent->left == node) {
+            split_node(node, split_nodes);
+        }
+        node = parent;
+        if (node) parent = node->parent;
+    }
+
+    return split_nodes;
 }
 
 /*
