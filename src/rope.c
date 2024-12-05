@@ -342,8 +342,10 @@ SplitRopeNodes *split_no_rebalance(RopeNode *root, int index) {
     SplitRopeNodes *split_nodes = malloc(sizeof(SplitRopeNodes));
     if (!split_nodes) {
         printf("Error - failed to allocate memory for split_no_rebalance.\n");
-     return NULL;
+        return NULL;
     }
+    split_nodes->first = root;
+    split_nodes->second = NULL;
 
     RopeNode *leaf = fetch_leaf(root, &index);
     if (index > 0) {

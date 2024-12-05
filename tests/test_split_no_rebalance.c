@@ -44,7 +44,7 @@ void test_split_no_re_2() {
     int right_weights[] = {1, 1, 6, 1, 1};
     int right_index = 0;
     int right_size = 5;
-    assert(compare_nodes(split_nodes->first, right_lengths, right_heights, right_weights, &right_index, right_size));
+    assert(compare_nodes(split_nodes->second, right_lengths, right_heights, right_weights, &right_index, right_size));
 
     free_tree(split_nodes->first);
     free_tree(split_nodes->second);
