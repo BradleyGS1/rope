@@ -50,6 +50,7 @@ void test_split_no_re_2() {
     free_tree(split_nodes->second);
     free(split_nodes);
 }
+
 int main() {
     test_split_no_re_1();
     test_split_no_re_2();
