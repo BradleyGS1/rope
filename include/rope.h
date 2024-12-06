@@ -39,6 +39,7 @@ bool compare_nodes(RopeNode *root, int *lengths, int *heights, int *weights, int
 
 // Rope operations
 RopeNode *fetch_leaf(RopeNode *root, int *index);
+void collect_leaves(RopeNode *root, RopeNode ***leaves, int *index);
 RopeNode *concat_no_rebalance(RopeNode *left, RopeNode *right);
 void divide_leaf(RopeNode *node, int index);
 SplitRopeNodes *split_no_rebalance(RopeNode *root, int index);

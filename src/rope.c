@@ -203,6 +203,37 @@ RopeNode *fetch_leaf(RopeNode *root, int *index) {
 }
 
 /*
+ * Fetches an array of pointers which each point to a leaf in the tree with the
+ * provided root. This operation works recursively.
+ * Parameters:
+ * - RopeNode *root. A pointer to the root of the rope tree we want to collect
+ *   the leaves of.
+ * - RopeNode ***leaves. Pointer to the array of pointers which each point to a
+ *   leaf. User should input a reference to a NULL array of type RopeNode **.
+ *   The array should contain the leaves after operation.
+ * - int *index. A pointer to the integer index. User should input a reference
+ *   to an int initialised with value 0. The int should equal the number of
+ *   leaves after operation.
+ */
+void collect_leaves(RopeNode *root, RopeNode ***leaves, int *index) {
+    if (!root) return;
+
+    if (root->left) collect_leaves(root->left, leaves, index);
+    if (root->right) collect_leaves(root->right, leaves, index);
+
+    if (!root->left && !root->right) {
+        RopeNode **temp = realloc(*leaves, (*index + 1) * sizeof(RopeNode *));
+        if (!temp) {
+            printf("Error - failed to reallocate memory for collect_leaves.\n");
+            return;
+        }
+        *leaves = temp;
+        (*leaves)[*index] = root;
+        (*index)++;
+    }
+}
+
+/*
  * Concatenates two nodes 'left' and 'right' allocating memory for a new parent
  * node 'parent' and setting the left child of 'parent' to be 'left' and the right
  * child of 'parent' to be 'right'. This function DOES NOT PERFORM REBALANCING and
