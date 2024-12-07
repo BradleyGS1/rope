@@ -8,13 +8,13 @@
  * pointer.
  * Parameters:
  * - char *str. This is a small part of the full string that we want to be
- *   represented by this single RopeNode. The full string is the concatenation of
+ *  represented by this single RopeNode. The full string is the concatenation of
  *   all substrings represented by the leaves of a rope. The argument is copied
- *   and allocated memory and so the user may call free(str) without altering the
+ *  and allocated memory and so the user may call free(str) without altering the
  *   created node.
  * Returns:
  * - RopeNode *. This is a pointer to the RopeNode leaf. This leaf (and stored
- *   string) must be freed by the user either explicitly by calling free_leaf(leaf)
+ *  string) must be freed by the user either explicitly by calling free_leaf(leaf)
  *   or implicitly by calling free_tree(root) where root is the pointer to the root 
  *   node of the tree which contains leaf.
  */
@@ -64,6 +64,16 @@ void free_tree(RopeNode *root) {
     if (root->left) free_tree(root->left);
     if (root->right) free_tree(root->right);
     free_leaf(root);
+}
+
+void free_tree_except_leaves(RopeNode *root) {
+    if (!root) {
+        printf("Error - argument RopeNode *root cannot be NULL for free_tree_except_leaves.\n");
+        return;
+    }
+    if (root->left) free_tree_except_leaves(root->left);
+    if (root->right) free_tree_except_leaves(root->right);
+    if (root->left || root->right) free_leaf(root);
 }
 
 /*
@@ -231,6 +241,40 @@ void collect_leaves(RopeNode *root, RopeNode ***leaves, int *index) {
         (*leaves)[*index] = root;
         (*index)++;
     }
+}
+
+/*
+ * Builds a balanced rope tree from the bottom up from the user provided array
+ * of leaves.
+ * Parameters:
+ * - RopeNode ***leaves. A reference to the array of pointers which point to the
+ *   leaf nodes.
+ * - int size. The size of the leaves array.
+ * Returns:
+ * - RopeNode *. A pointer to the root node of the newly created balanced tree.
+ */
+RopeNode *build_tree(RopeNode ***leaves, int size) {
+    int power_two = 1;
+    while (true) {
+        if (power_two * 2 > size) break;
+        power_two *= 2;
+    }
+    int remainder = size - power_two;
+    for (int i = 0; i < remainder; i++) {
+        (*leaves)[i] = concat_no_rebalance((*leaves)[2*i], (*leaves)[2*i+1]);
+    }
+    if (remainder > 0) {
+        for (int i = remainder; i < power_two; i++) {
+            (*leaves)[i] = (*leaves)[i + remainder];
+        }
+    }
+    while (power_two >= 2) {
+        for (int i = 0; i < power_two; i++) {
+            (*leaves)[i] = concat_no_rebalance((*leaves)[2*i], (*leaves)[2*i+1]);
+        }
+        power_two /= 2;
+    }
+    return (*leaves)[0];
 }
 
 /*

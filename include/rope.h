@@ -29,6 +29,7 @@ typedef struct SplitRopeNodes {
 RopeNode *allocate_leaf(char *str);
 void free_leaf(RopeNode *leaf);
 void free_tree(RopeNode *root);
+void free_tree_except_leaves(RopeNode *root);
 void backprop_height(RopeNode *node);
 void split_node(RopeNode *node, SplitRopeNodes *split_nodes);
 
@@ -40,6 +41,7 @@ bool compare_nodes(RopeNode *root, int *lengths, int *heights, int *weights, int
 // Rope operations
 RopeNode *fetch_leaf(RopeNode *root, int *index);
 void collect_leaves(RopeNode *root, RopeNode ***leaves, int *index);
+RopeNode *build_tree(RopeNode ***leaves, int size);
 RopeNode *concat_no_rebalance(RopeNode *left, RopeNode *right);
 void divide_leaf(RopeNode *node, int index);
 SplitRopeNodes *split_no_rebalance(RopeNode *root, int index);
