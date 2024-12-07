@@ -71,9 +71,10 @@ void free_tree_except_leaves(RopeNode *root) {
         printf("Error - argument RopeNode *root cannot be NULL for free_tree_except_leaves.\n");
         return;
     }
+    bool is_leaf = (!root->left && !root->right);
     if (root->left) free_tree_except_leaves(root->left);
     if (root->right) free_tree_except_leaves(root->right);
-    if (root->left || root->right) free_leaf(root);
+    if (!is_leaf) free_leaf(root);
 }
 
 /*
