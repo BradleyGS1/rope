@@ -255,8 +255,7 @@ void collect_leaves(RopeNode *root, RopeNode ***leaves, int *index) {
  */
 RopeNode *build_tree(RopeNode ***leaves, int size) {
     int power_two = 1;
-    while (true) {
-        if (power_two * 2 > size) break;
+    while (power_two * 2 <= size) {
         power_two *= 2;
     }
     int remainder = size - power_two;
@@ -269,7 +268,7 @@ RopeNode *build_tree(RopeNode ***leaves, int size) {
         }
     }
     while (power_two >= 2) {
-        for (int i = 0; i < power_two; i++) {
+        for (int i = 0; i < power_two / 2; i++) {
             (*leaves)[i] = concat_no_rebalance((*leaves)[2*i], (*leaves)[2*i+1]);
         }
         power_two /= 2;
@@ -297,8 +296,7 @@ RopeNode *build_tree(RopeNode ***leaves, int size) {
  */
 RopeNode *concat_no_rebalance(RopeNode *left, RopeNode *right) {
     if (!left && !right) {
-        printf("Error - arguments RopeNode *left, RopeNode *right cannot both be\
-            NULL.\n");
+        printf("Error - arguments RopeNode *left, RopeNode *right cannot both be NULL.\n");
         return NULL;
     }
 
