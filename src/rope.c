@@ -336,6 +336,73 @@ RopeNode *concat_no_rebalance(RopeNode *left, RopeNode *right) {
 }
 
 /*
+ * Concatenates two nodes 'left' and 'right' allocating memory for a new parent
+ * node 'parent' and setting the left child of 'parent' to be 'left' and the right
+ * child of 'parent' to be 'right'. This function WILL ALWAYS CREATE A BALANCED TREE.
+ * The node created by this function must have the memory allocated for it cleared,
+ * the easiest way of doing so is by calling free_tree(parent) which will free the
+ * whole subtree with 'parent' as its root. free_leaf(parent) may also be called but
+ * is not recommended.
+ * Parameters:
+ * - RopeNode *left. The pointer to the balanced subtree we want to make the left subtree
+ *   of a new node. Only one of left or right can be NULL.
+ * - RopeNode *right. The pointer to the balanced subtree we want to make the right subtree
+ *   of a new node. Only one of left or right can be NULL.
+ * Returns:
+ * - RopeNode *. The pointer to the newly created node. Must be freed with free_tree
+ *   or free_leaf. IS GUARANTEED TO BE A BALANCED TREE.
+ */
+RopeNode *concat(RopeNode *left, RopeNode *right) {
+    if (!left && !right) {
+        printf("Error - arguments RopeNode *left, RopeNode *right cannot both be NULL.\n");
+        return NULL;
+    }
+
+    RopeNode *parent = malloc(sizeof(RopeNode));
+    if (!parent) {
+        printf("Error - failed to allocate memory for concat_no_rebalance.\n");
+        return NULL;
+    }
+
+    int left_length = 0, right_length = 0;
+    int left_height = 0, right_height = 0;
+    int left_weight = 0, right_weight = 0;
+
+    if (left) {
+        left->parent = parent;
+        left_length = left->length;
+        left_height = left->height;
+        left_weight = left->weight;
+    }
+    if (right) {
+        right->parent = parent;
+        right_length = right->length;
+        right_height = right->height;
+        right_weight = right->weight;
+    }
+
+    parent->str = NULL;
+    parent->left = left;
+    parent->right = right;
+    parent->parent = NULL;
+    parent->length = left_length + right_length;
+    parent->height = (left_height > right_height ? left_height : right_height) + 1;
+    parent->weight = left_length;
+
+    // Rebalance created tree if it is unbalanced
+    if (!is_balanced(parent)) {
+        RopeNode **leaves = NULL;
+        int index = 0;
+        collect_leaves(parent, &leaves, &index);
+        free_tree_except_leaves(parent);
+        parent = build_tree(&leaves, index);
+        free(leaves);
+    }
+
+    return parent;
+}
+
+/*
  * Divides a leaf into two leaves which branch from the original. The length of the string
  * represented by the new left leaf is index and the remaining string goes to the right leaf.
  * This is used in the split operation. DOES NOT AUTOMATICALLY BACKPROP HEIGHT VALUES.
@@ -467,6 +534,25 @@ SplitRopeNodes *split_no_rebalance(RopeNode *root, int index) {
     }
 
     return split_nodes;
+}
+
+/*
+ * TESTING ONLY
+ * Checks the whole tree to make sure that all subtrees in tree we are checking
+ * are also balanced. Early stops if at any stage a subtree is found to be
+ * unbalanced.
+ * Parameters:
+ * - RopeNode *root. The pointer to the root of the tree we want to check.
+ * Returns:
+ * - bool. True if the whole tree including all subtrees are balanced else false.
+ */
+bool testing_tree_is_balanced(RopeNode *root) {
+    if (!root) return true;
+    if (!testing_tree_is_balanced(root->left)) return false;
+    if (!testing_tree_is_balanced(root->right)) return false;
+    int left_height = (root->left ? root->left->height : 0);
+    int right_height = (root->right ? root->right->height : 0);
+    return (abs(left_height - right_height) <= 1);
 }
 
 /*

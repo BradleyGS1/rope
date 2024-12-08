@@ -43,10 +43,12 @@ RopeNode *fetch_leaf(RopeNode *root, int *index);
 void collect_leaves(RopeNode *root, RopeNode ***leaves, int *index);
 RopeNode *build_tree(RopeNode ***leaves, int size);
 RopeNode *concat_no_rebalance(RopeNode *left, RopeNode *right);
+RopeNode *concat(RopeNode *left, RopeNode *right);
 void divide_leaf(RopeNode *node, int index);
 SplitRopeNodes *split_no_rebalance(RopeNode *root, int index);
 
 // Testing functions
+bool testing_tree_is_balanced(RopeNode *root);
 RopeNode *testing_create_tree_1();
 RopeNode *testing_create_tree_2();
 
